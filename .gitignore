@@ -241,7 +241,3 @@ catkin_generated/
 #Datasets
 ros2_ws/assets/
 */nya_03/
-
-#SLAM Repositories
-ros2_ws/src/LIO-SLAM
-*/LIO-SLAM/

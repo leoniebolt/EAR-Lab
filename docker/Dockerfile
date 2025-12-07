@@ -40,10 +40,19 @@ WORKDIR /home/$USERNAME
 
 # Install ROS dev tools, TurtleBot3, Gazebo, MoveIt, and visualization tools
 #     ros-humble-robot-state-publisher \ ros-humble-joint-state-publisher \ added but still not build with it
-RUN sudo apt update && sudo apt install -y \
+RUN sudo apt update && sudo apt install -y software-properties-common && \
+    sudo add-apt-repository ppa:borglab/gtsam-release-4.1 -y && \
+    sudo apt update && sudo apt install -y \
     git curl gdb gdbserver python3-pip \
     python3-colcon-common-extensions \
+    # --- Dependencies from your requirements ---
+    ros-humble-perception-pcl \
+    ros-humble-pcl-msgs \
+    ros-humble-vision-opencv \
     ros-humble-xacro \
+    libgtsam-dev \
+    libgtsam-unstable-dev \
+    # ------------------------------------------
     ros-humble-rviz2 \
     ros-humble-robot-state-publisher \ 
     ros-humble-joint-state-publisher \
@@ -61,10 +70,9 @@ RUN sudo apt update && sudo apt install -y \
     ros-humble-controller-manager \
     ros-humble-diff-drive-controller \
     ros-humble-joint-trajectory-controller \
-    # === BEGIN: Eigene Ubuntu/ROS-Packages ===
-    # Hier weitere Pakete einfügen, z.B.:
-    # ros-humble-mein-extra-paket \
-    # === END: Eigene Ubuntu/ROS-Packages ===
+    # Note: I removed ros-humble-gtsam to avoid conflicts with the PPA version
+    libtbb-dev \
+    libpcl-dev \
     && sudo apt autoremove -y && sudo apt clean
 
 # ============================================================

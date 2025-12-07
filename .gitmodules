@@ -1,3 +1,3 @@
-[submodule "/home/yuzi/.localgit/EAR-Lab/ros2_ws/src/LIO-SLAM"]
-	path = /home/yuzi/.localgit/EAR-Lab/ros2_ws/src/LIO-SLAM
+[submodule "/home/yuzi/.localgit/EAR-Lab/ros2_ws/src/LIO-SAM"]
+	path = /home/yuzi/.localgit/EAR-Lab/ros2_ws/src/LIO-SAM
 	url = https://github.com/TixiaoShan/LIO-SAM.git
