@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  ros2:
+    image: ros2-slam
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ros2_slam_container
+    privileged: true
+    network_mode: host
+    tty: true
+    ipc: host
+    volumes:
+      - ../ros2_ws:/home/ubuntu/ros2_ws
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - $XAUTHORITY:/root/.Xauthority
+    environment:
+      QT_X11_NO_MITSHM: 1
+      DISPLAY: $DISPLAY
+      # Standard: GPU deaktiviert
+      NVIDIA_VISIBLE_DEVICES: void
+      NVIDIA_DRIVER_CAPABILITIES: ""
+
+    # GPU nur nutzen, wenn verfügbar
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+              count: 0
+
+volumes:
+  ros2_ws:
+    driver: local
