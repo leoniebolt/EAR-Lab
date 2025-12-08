@@ -52,6 +52,8 @@ RUN sudo apt update && sudo apt install -y software-properties-common && \
     ros-humble-xacro \
     libgtsam-dev \
     libgtsam-unstable-dev \
+    ros-humble-ouster-ros \
+    ros-humble-velodyne \
     # ------------------------------------------
     ros-humble-rviz2 \
     ros-humble-robot-state-publisher \ 
