@@ -239,6 +239,4 @@ cmake-build-*/
 catkin_generated/
 
 #Datasets
-*/assets/nya_03/
-*/assets/M2DGR/
-*/assets/mimap_in_slam_00/
+*/assets/Datasets/
