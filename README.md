@@ -25,7 +25,7 @@ pip3 install rosbags
 ```
 
 
-Then convert the rosbag:
+Then convert the rosbag (in this case, the dataset hall_03 was used):
 ```bash
 rosbags-convert \
   --src hall_03.bag \
@@ -66,6 +66,7 @@ All the following should stay in
 
 
 **1st container**:
+Start the SLAM process:
 ```bash
 cd src/livox_ros_driver2/
 
@@ -76,12 +77,14 @@ ros2 launch fast_lio mapping_m2dgr.launch.py
 
 In case you want a tum file start this in your second container, since the script should be started before the rosbag gets played.
 **2nd container**:
+Start the python script to create the tum file:
 ```bash
 python3 save_global_path.py
 ```
 
 
 **3rd container**:
+Start the rosbag:
 ```bash
 ros2 bag play hall_03
 ```
