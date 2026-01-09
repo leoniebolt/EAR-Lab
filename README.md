@@ -2,9 +2,9 @@
 
 ## Installation
 Follow instructions of FAST LIO ROS2 github:
-'''bash
+```bash
 https://github.com/Lee-JaeWon/FAST_LIO_ROS2.git
-'''
+```
 
 ```bash
 git clone --recursive https://github.com/Taeyoung96/FAST_LIO_ROS2.git
