@@ -22,30 +22,30 @@ sudo chmod -R 777 container_run.sh
 
 
  Open a two more terminals (so you have in total 3):
- '''bash
+ ```bash
  docker exec -it fast-lio-ros2 /bin/bash
 
  source /opt/ros/humble/setup.bash
-'''
+```
 
 All should stay in
-'''bash
+```bash
 ~/ros2_ws
-'''
+```
 
 **1st container**:
-'''bash
+```bash
 cd src/livox_ros_driver2/
 
 source install/setup.bash
 
 ros2 launch fast_lio mapping_m2dgr.launch.py
-'''
+```
 
 
 **2nd container**:
-'''bash
+```bash
 ros2 bag play hall_03
-'''
+``
 
 
