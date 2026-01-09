@@ -6,6 +6,7 @@ Follow instructions of FAST LIO ROS2 github:
 https://github.com/Lee-JaeWon/FAST_LIO_ROS2.git
 ```
 
+
 ```bash
 git clone --recursive https://github.com/Taeyoung96/FAST_LIO_ROS2.git
 
@@ -21,17 +22,20 @@ sudo chmod -R 777 container_run.sh
  ```
 
 
- Open a two more terminals (so you have in total 3):
+
+ Open a two more terminals (so you have 3 in total):
  ```bash
  docker exec -it fast-lio-ros2 /bin/bash
 
  source /opt/ros/humble/setup.bash
 ```
 
+
 All should stay in
 ```bash
 ~/ros2_ws
 ```
+
 
 **1st container**:
 ```bash
@@ -41,6 +45,7 @@ source install/setup.bash
 
 ros2 launch fast_lio mapping_m2dgr.launch.py
 ```
+
 
 
 **2nd container**:
