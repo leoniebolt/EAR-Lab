@@ -1,4 +1,4 @@
-### FAST LIO ROS2
+## FAST LIO ROS2
 
 In case you later want to evaluate the SLAM, clone this repository to get the python script to create a custom tum file from this SLAM.
 ```bash
@@ -6,7 +6,7 @@ git clone https://github.com/leoniebolt/EAR-Lab.git
 cd EAR-Lab
 ```
 
-## Installation
+# Installation
 Follow instructions of FAST LIO ROS2 github: https://github.com/Lee-JaeWon/FAST_LIO_ROS2.git:
 ```bash
 git clone --recursive https://github.com/Taeyoung96/FAST_LIO_ROS2.git
