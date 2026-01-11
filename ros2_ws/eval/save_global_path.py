@@ -1,61 +1,82 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from nav_msgs.msg import Path
+import sys
 
 # CONFIGURATION
-# LIO-SAM outputs the full optimized path here
 TOPIC_NAME = "/lio_sam/mapping/path"
-OUTPUT_FILE = "liosam_global_path.txt"
+OUTPUT_FILE = "liosam_raw_trajectory.txt"
 
-class GlobalPathSaver(Node):
+class PathRecorder(Node):
     def __init__(self):
-        super().__init__('global_path_saver')
+        super().__init__('path_recorder')
+        
+        # Use BEST_EFFORT to ensure we catch the topic even if QoS settings vary
+        qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1
+        )
+
         self.subscription = self.create_subscription(
-            Path, TOPIC_NAME, self.listener_callback, 10)
+            Path, 
+            TOPIC_NAME, 
+            self.listener_callback, 
+            qos_profile
+        )
+        
         self.latest_path = None
-        self.get_logger().info(f"Waiting for path on {TOPIC_NAME}...")
+        self.get_logger().info(f"Waiting for Path data on {TOPIC_NAME}...")
+        self.get_logger().info("The script will capture the FULL trajectory. Press Ctrl+C when the run is finished to save.")
 
     def listener_callback(self, msg):
-        # Store the latest (longest) path in memory
+        # Always update to the latest full path message
         self.latest_path = msg
         count = len(msg.poses)
-        # Only print every 100 updates to keep terminal clean
-        if count % 100 == 0: 
-            self.get_logger().info(f"Current path length: {count} poses")
+        self.get_logger().info(f"Tracking path: {count} poses received...", throttle_duration_sec=5.0)
 
     def save_to_file(self):
         if self.latest_path is None:
-            self.get_logger().warn("No path received! Did LIO-SAM run?")
+            self.get_logger().warn("No path received! File not saved.")
             return
 
-        print(f"Saving {len(self.latest_path.poses)} poses to {OUTPUT_FILE}...")
+        pose_count = len(self.latest_path.poses)
+        self.get_logger().info(f"Saving {pose_count} RAW poses to {OUTPUT_FILE}...")
+        
         with open(OUTPUT_FILE, "w") as f:
+            # Iterate strictly over the poses provided by the SLAM node
             for pose_stamped in self.latest_path.poses:
-                # 1. Timestamp
-                sec = pose_stamped.header.stamp.sec
-                nsec = pose_stamped.header.stamp.nanosec
-                timestamp = f"{sec}.{nsec:09d}"
-
-                # 2. Position & Rotation
-                p = pose_stamped.pose.position
-                o = pose_stamped.pose.orientation
                 
-                # 3. Write Line (TUM format)
-                line = f"{timestamp} {p.x:.4f} {p.y:.4f} {p.z:.4f} {o.x:.4f} {o.y:.4f} {o.z:.4f} {o.w:.4f}\n"
+                # Get timestamp from the specific pose, not the global header
+                # This ensures the time corresponds exactly to when that keyframe was created
+                t = pose_stamped.header.stamp.sec + pose_stamped.header.stamp.nanosec * 1e-9
+                
+                p = pose_stamped.pose.position
+                q = pose_stamped.pose.orientation
+                
+                # TUM Format: timestamp x y z qx qy qz qw
+                # Using .9f for precision to ensure no data loss
+                line = f"{t:.9f} {p.x:.9f} {p.y:.9f} {p.z:.9f} {q.x:.9f} {q.y:.9f} {q.z:.9f} {q.w:.9f}\n"
                 f.write(line)
-        print("File saved successfully.")
+
+        self.get_logger().info(f"Successfully saved {pose_count} poses. No interpolation applied.")
+
+    def destroy_node(self):
+        # Save automatically on shutdown
+        self.save_to_file()
+        super().destroy_node()
 
 def main(args=None):
     rclpy.init(args=args)
-    saver = GlobalPathSaver()
+    recorder = PathRecorder()
     try:
-        rclpy.spin(saver)
+        rclpy.spin(recorder)
     except KeyboardInterrupt:
-        # Save when you press Ctrl+C
-        saver.save_to_file()
+        pass # Allow clean exit to trigger save
     finally:
-        saver.destroy_node()
+        recorder.destroy_node()
         rclpy.shutdown()
 
 if __name__ == '__main__':
