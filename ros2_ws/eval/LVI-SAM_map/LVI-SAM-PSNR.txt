@@ -1,0 +1,29 @@
+========================================
+      WALL QUALITY & PSNR REPORT        
+========================================
+
+Wall #1
+  Points: 12990
+  RMSE:   0.0283 m
+  PSNR:   65.40 dB
+  Size:   52.65 m (diagonal)
+------------------------------
+Wall #2
+  Points: 4509
+  RMSE:   0.0280 m
+  PSNR:   64.77 dB
+  Size:   48.53 m (diagonal)
+------------------------------
+Wall #3
+  Points: 3749
+  RMSE:   0.0275 m
+  PSNR:   65.23 dB
+  Size:   50.18 m (diagonal)
+------------------------------
+
+============================
+GLOBAL EVALUATION (AVERAGE)
+============================
+Walls Analyzed: 3
+Average RMSE:   0.0279 m
+Average PSNR:   65.13 dB
