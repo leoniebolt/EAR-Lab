@@ -1,18 +1,24 @@
 import open3d as o3d
 import numpy as np
-import os
 import math
+import copy
 
 # -------------------------------
-# CONFIG
+# CONFIGURATION
 # -------------------------------
-PCD_PATH = "FAST-LIO_map/GlobalMap.pcd"
-OUTPUT_FILE = "wall_quality_report.txt"
+PCD_PATH = "LVI-SAM_map/GlobalMap.pcd"
+OUTPUT_FILE = "wall_quality_inclusive.txt"
 
-DISTANCE_THRESHOLD = 0.05   # meters
+# DETECTION SETTINGS (Finding the wall)
+DETECT_THRESHOLD = 0.05     # RANSAC threshold (tight)
 MIN_PLANE_POINTS = 2000     
-MAX_WALLS = 5               
-Z_AXIS_THRESHOLD = 0.8      # Filter: If normal_z > 0.8, it's a floor (skip it)
+MAX_WALLS = 20               
+Z_AXIS_THRESHOLD = 0.8      # Filter out floors
+
+# EVALUATION SETTINGS (Grading the wall)
+# We will look for points this far away from the center of the wall
+# 0.60 meters = +/- 30cm on each side
+EVALUATION_THICKNESS = 0.60 
 
 # -------------------------------
 # SETUP
@@ -27,14 +33,14 @@ if len(pcd.points) == 0:
 pcd = pcd.voxel_down_sample(voxel_size=0.02)
 print(f"Loaded {len(pcd.points)} points.\n")
 
-# Initialize lists to store stats for global average
+# Global Stats
 all_rmse = []
 all_psnr = []
 
-# Initialize Report File
 with open(OUTPUT_FILE, "w") as f:
     f.write("========================================\n")
-    f.write("      WALL QUALITY & PSNR REPORT        \n")
+    f.write("   INCLUSIVE WALL QUALITY REPORT        \n")
+    f.write(f"   (Evaluating thickness: {EVALUATION_THICKNESS}m)\n")
     f.write("========================================\n\n")
 
 remaining_cloud = pcd
@@ -45,12 +51,12 @@ walls_found = 0
 # -------------------------------
 while walls_found < MAX_WALLS:
     if len(remaining_cloud.points) < MIN_PLANE_POINTS:
-        print("Not enough points left to find more walls.")
+        print("Not enough points left.")
         break
 
-    # 1. Detect Plane
+    # 1. DETECT (Find the ideal location using RANSAC)
     plane_model, inliers = remaining_cloud.segment_plane(
-        distance_threshold=DISTANCE_THRESHOLD,
+        distance_threshold=DETECT_THRESHOLD,
         ransac_n=3,
         num_iterations=1000
     )
@@ -60,91 +66,106 @@ while walls_found < MAX_WALLS:
 
     [a, b, c, d] = plane_model
     
-    # 2. Check Orientation (Filter out floors)
-    # If Z-component of normal is high, it's a floor/ceiling
+    # Check if Floor
     if abs(c) > Z_AXIS_THRESHOLD:
         remaining_cloud = remaining_cloud.select_by_index(inliers, invert=True)
         continue
 
-    # 3. Process Wall
     walls_found += 1
     
-    # Extract points
-    wall_cloud = remaining_cloud.select_by_index(inliers)
-    wall_cloud.paint_uniform_color([1.0, 0.0, 0.0])  # Red Wall
+    # 2. CREATE EXPANDED BOUNDING BOX
+    # Extract the "perfect" points just to get the orientation/center
+    core_wall = remaining_cloud.select_by_index(inliers)
     
-    # Visualization Background (Dark Grey)
-    temp_remaining = remaining_cloud.select_by_index(inliers, invert=True)
-    temp_remaining.paint_uniform_color([0.1, 0.1, 0.1]) 
+    # Calculate Oriented Bounding Box (OBB) of the core wall
+    obb = core_wall.get_oriented_bounding_box()
+    
+    # Get current center, rotation (R), and size (extent)
+    center = obb.center
+    R = obb.R
+    extent = obb.extent # [width, height, depth]
+    
+    # Find which dimension is the "thickness" (the smallest one)
+    min_axis = np.argmin(extent)
+    
+    # Force the thickness to be our EVALUATION_THICKNESS
+    new_extent = copy.deepcopy(extent)
+    new_extent[min_axis] = EVALUATION_THICKNESS
+    
+    # Create the new Expanded Box
+    expanded_obb = o3d.geometry.OrientedBoundingBox(center, R, new_extent)
+    expanded_obb.color = (1, 0, 0) # Red wireframe
 
-    # 4. Calculate RMSE
-    pts = np.asarray(wall_cloud.points)
+    # 3. CROP (Capture ALL points in that box, including noise)
+    # We crop from 'remaining_cloud' to catch the drift
+    evaluation_cloud = remaining_cloud.crop(expanded_obb)
+    
+    # Color them GREEN for visualization
+    evaluation_cloud.paint_uniform_color([0.0, 1.0, 0.0]) 
+
+    # 4. CALCULATE METRICS (Using the extended cloud)
+    pts = np.asarray(evaluation_cloud.points)
+    
+    # Calculate distance of ALL these points to the Ideal Plane
     distances = np.abs(a * pts[:, 0] + b * pts[:, 1] + c * pts[:, 2] + d)
     distances /= np.sqrt(a * a + b * b + c * c)
-    rmse = np.sqrt(np.mean(distances ** 2))
-
-    # 5. Calculate PSNR
-    bbox = wall_cloud.get_axis_aligned_bounding_box()
-    wall_diagonal = np.linalg.norm(bbox.get_max_bound() - bbox.get_min_bound())
     
+    rmse = np.sqrt(np.mean(distances ** 2))
+    
+    # Calculate PSNR
+    wall_diagonal = np.linalg.norm(new_extent) # Use box size as reference
     if rmse > 0:
         psnr = 20 * math.log10(wall_diagonal / rmse)
     else:
         psnr = 0.0
 
-    # Store stats for global average
     all_rmse.append(rmse)
     all_psnr.append(psnr)
 
-    print(f"[WALL #{walls_found}] Points: {len(pts)} | RMSE: {rmse:.4f}m | PSNR: {psnr:.2f} dB")
+    print(f"[WALL #{walls_found}]")
+    print(f"  Points captured: {len(pts)} (Core + Noise)")
+    print(f"  RMSE: {rmse:.4f} m")
+    print(f"  PSNR: {psnr:.2f} dB")
 
-    # 6. Log Individual Wall to file
+    # 5. LOGGING
     with open(OUTPUT_FILE, "a") as f:
         f.write(f"Wall #{walls_found}\n")
+        f.write(f"  Evaluation Thickness: {EVALUATION_THICKNESS} m\n")
         f.write(f"  Points: {len(pts)}\n")
         f.write(f"  RMSE:   {rmse:.4f} m\n")
         f.write(f"  PSNR:   {psnr:.2f} dB\n")
-        f.write(f"  Size:   {wall_diagonal:.2f} m (diagonal)\n")
         f.write("-" * 30 + "\n")
 
-    # 7. VISUALIZE
-    print(f"   -> Opening Window... (Wall is RED). Close window to continue.")
-    o3d.visualization.draw_geometries(
-        [wall_cloud, temp_remaining],
-        window_name=f"Wall #{walls_found} | RMSE: {rmse:.3f}m | PSNR: {psnr:.1f}dB",
-        width=1024, height=768
-    )
+    # 6. VISUALIZATION
+    # Background points (Dark Grey)
+    # We remove the *evaluation points* from the background to avoid overlap
+    # Note: crop() returns a new cloud, so we need a clever way to visualize the rest.
+    # Simple way: Just paint the whole remaining cloud grey, then draw the green on top.
+    viz_background = copy.deepcopy(remaining_cloud)
+    viz_background.paint_uniform_color([0.1, 0.1, 0.1])
+    
+    print("  -> Opening Window... (Green = Data | Red Box = Search Area)")
+    # o3d.visualization.draw_geometries(
+    #     [viz_background, evaluation_cloud, expanded_obb],
+    #     window_name=f"Wall #{walls_found} Inclusive Eval",
+    #     width=1024, height=768
+    # )
 
-    # 8. Clean up for next iteration
+    # 7. CLEANUP
+    # Remove the *original inliers* (the core wall) so we don't find it again.
     remaining_cloud = remaining_cloud.select_by_index(inliers, invert=True)
 
 # -------------------------------
 # GLOBAL EVALUATION
 # -------------------------------
-print("\nCalculating Global Metrics...")
-
 if len(all_rmse) > 0:
     avg_rmse = np.mean(all_rmse)
     avg_psnr = np.mean(all_psnr)
-
-    # Print to Console
     print("\n============================")
-    print("GLOBAL MAP QUALITY")
-    print("============================")
-    print(f"Walls Analyzed: {walls_found}")
-    print(f"Average RMSE:   {avg_rmse:.4f} m")
-    print(f"Average PSNR:   {avg_psnr:.2f} dB")
-    print(f"Report saved:   {OUTPUT_FILE}")
-
-    # Write to File
+    print(f"Global RMSE: {avg_rmse:.4f} m")
+    print(f"Global PSNR: {avg_psnr:.2f} dB")
+    
     with open(OUTPUT_FILE, "a") as f:
-        f.write("\n============================\n")
-        f.write("GLOBAL EVALUATION (AVERAGE)\n")
-        f.write("============================\n")
-        f.write(f"Walls Analyzed: {walls_found}\n")
-        f.write(f"Average RMSE:   {avg_rmse:.4f} m\n")
-        f.write(f"Average PSNR:   {avg_psnr:.2f} dB\n")
-else:
-    print("No walls were detected, so no global stats could be calculated.")
-    with open(OUTPUT_FILE, "a") as f:
-        f.write("\nNo valid walls detected.\n")
+        f.write("\nGLOBAL AVERAGES\n")
+        f.write(f"RMSE: {avg_rmse:.4f} m\n")
+        f.write(f"PSNR: {avg_psnr:.2f} dB\n")

@@ -1,0 +1,39 @@
+========================================
+   INCLUSIVE WALL QUALITY REPORT        
+   (Evaluating thickness: 0.6m)
+========================================
+
+Wall #1
+  Evaluation Thickness: 0.6 m
+  Points: 123242
+  RMSE:   0.1254 m
+  PSNR:   52.79 dB
+------------------------------
+Wall #2
+  Evaluation Thickness: 0.6 m
+  Points: 39815
+  RMSE:   0.1407 m
+  PSNR:   51.41 dB
+------------------------------
+Wall #3
+  Evaluation Thickness: 0.6 m
+  Points: 24099
+  RMSE:   0.1452 m
+  PSNR:   50.41 dB
+------------------------------
+Wall #4
+  Evaluation Thickness: 0.6 m
+  Points: 22416
+  RMSE:   0.1510 m
+  PSNR:   56.41 dB
+------------------------------
+Wall #5
+  Evaluation Thickness: 0.6 m
+  Points: 11582
+  RMSE:   0.1380 m
+  PSNR:   45.71 dB
+------------------------------
+
+GLOBAL AVERAGES
+RMSE: 0.1401 m
+PSNR: 51.35 dB
