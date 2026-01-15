@@ -1,0 +1,43 @@
+1. git clone "https://github.com/MichaelGrupp/evo"
+
+2. docker build -t evo-image -f Dockerfile.ros-kilted . 	//inside the git repo
+
+3. docker run -it \
+    --net=host \
+    --env="DISPLAY=$DISPLAY" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    -v /home/felix/evo:/work \					//mount your fodler here
+    evo-image \
+    /bin/bash 							//to create a container that stays open and has a folder mounted, you can delete the old one
+    
+4. xhost +local:docker						//run on host to let the evo-container use the display
+
+5.
+ 	evo_config set plot_trajectory_cmap viridis 			//inside the container, change color to greyscale
+ 	evo_config set plot_seaborn_style whitegrid			//removes blue/grey backround tint
+   	evo_config set plot_reference_linestyle --			//for extra clarity changes solid line to ---
+   	
+comands to copypaste for evaluation:
+
+All commands need to be employed in the folder the .txt files are in!
+
+evo_traj tum liloc_estimate.txt FAST_LIO.txt LIO-SAM.txt LVI-SAM.txt --ref ground_truth.txt --plot --plot_mode xy --align --correct_scale --t_max_diff 0.5 --save_plot map.png
+
+evo_ape tum ground_truth.txt liloc_estimate.txt -a -s --t_max_diff 0.5 --save_results liloc.zip
+evo_ape tum ground_truth.txt FAST_LIO.txt -a -s --t_max_diff 0.5 --save_results fast_lio.zip
+evo_ape tum ground_truth.txt LIO-SAM.txt -a -s --t_max_diff 0.5 --save_results LIO-SAM.zip
+evo_ape tum ground_truth.txt LVI-SAM.txt -a -s --t_max_diff 0.5 --save_results LVI-SAM.zip
+
+
+evo_res liloc.zip fast_lio.zip LIO-SAM.zip LVI-SAM.zip --plot
+evo_res liloc.zip fast_lio.zip LIO-SAM.zip LVI-SAM.zip --plot --save_plot rsme.png
+
+
+
+evo_rpe tum ground_truth.txt liloc_estimate.txt -va --save_results rpe_liloc.zip
+evo_rpe tum ground_truth.txt FAST_LIO.txt -va --save_results rpe_fast_lio.zip
+evo_rpe tum ground_truth.txt LIO-SAM.txt -va --save_results rpe_lio_sam.zip
+evo_rpe tum ground_truth.txt LVI-SAM.txt -va --save_results rpe_lvi_sam.zip
+
+
+evo_res rpe_liloc.zip rpe_fast_lio.zip rpe_lio_sam.zip rpe_lvi_sam.zip -p
