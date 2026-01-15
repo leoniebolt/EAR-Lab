@@ -5,7 +5,7 @@ An easy-to-use and reproducible implementation of **LVI-SAM**, a tightly-coupled
 
 ---
 
-## 📌 Overview
+##  Overview
 
 This repository provides an **easy-to-use implementation of LVI-SAM**, adapted for
 practical execution and **reproducible experiments** within a SLAM comparison study.
@@ -15,12 +15,12 @@ The implementation is used to evaluate the performance of LVI-SAM on the
 
 This repository is part of the **EAR-Lab** project.
 
-🔗 **Main project repository:**  
+ **Main project repository:**  
 https://github.com/leoniebolt/EAR-Lab.git
 
 ---
 
-## 🧠 Algorithm
+##  Algorithm
 
 **LVI-SAM (LiDAR–Visual–Inertial Smoothing and Mapping)** is a tightly-coupled SLAM framework
 that jointly fuses:
@@ -35,14 +35,14 @@ jointly optimizes visual, inertial, and LiDAR constraints.
 This tight coupling enables **accurate and robust state estimation**, especially in
 challenging and dynamic environments.
 
-📄 **Original paper:**  
+ **Original paper:**  
 T. Shan et al.,  
 *LVI-SAM: Tightly-coupled Lidar-Visual-Inertial Odometry via Smoothing and Mapping*,  
 ICRA 2021
 
 ---
 
-## 📂 Dataset: M2DGR
+##  Dataset: M2DGR
 
 All experiments are conducted using the **M2DGR dataset**, which provides synchronized
 multi-sensor data, including:
@@ -52,12 +52,12 @@ multi-sensor data, including:
 - IMU  
 - Ground truth trajectories  
 
-🔗 **Dataset repository:**  
+ **Dataset repository:**  
 https://github.com/SJTU-ViSYS/M2DGR.git
 
 ---
 
-## 📥 Dataset Preparation
+##  Dataset Preparation
 
 ### 1. Download the Dataset
 ```bash
@@ -74,7 +74,7 @@ Select a dataset sequence (e.g. `hall_03`) that contains **ROS1 rosbag files**.
 
 ---
 
-## 🐳 Container Environment
+##  Container Environment
 
 All SLAM algorithms within the **EAR-Lab** project are executed using a **shared Docker container**
 to ensure:
@@ -88,11 +88,11 @@ to ensure:
 - ROS Noetic  
 - All required SLAM dependencies  
 
-⚠️ This repository is intended to be **built and executed inside the common EAR-Lab container**.
+ This repository is intended to be **built and executed inside the common EAR-Lab container**.
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```text
 LVI-SAM-Easyused/
@@ -105,7 +105,7 @@ LVI-SAM-Easyused/
 
 ---
 
-## ⚙️ Requirements
+##  Requirements
 
 ### System
 - Ubuntu 20.04  
@@ -125,7 +125,7 @@ LVI-SAM-Easyused/
 
 ---
 
-## 🛠️ Installation
+##  Installation
 
 ### 1. Create a Catkin Workspace
 ```bash
@@ -152,7 +152,7 @@ source devel/setup.bash
 
 ---
 
-## ▶️ Running LVI-SAM with M2DGR
+##  Running LVI-SAM with M2DGR
 
 ### 1. Launch LVI-SAM
 ```bash
@@ -166,7 +166,7 @@ rosbag play <M2DGR_SEQUENCE>.bag
 
 ---
 
-## 📊 Output
+##  Output
 
 LVI-SAM publishes:
 
@@ -179,7 +179,7 @@ All results can be visualized using **RViz**.
 
 ---
 
-## 📝 Notes
+##  Notes
 
 - Configuration files are adapted specifically for the **M2DGR dataset**
 - This repository focuses on **usability and reproducibility**
@@ -187,7 +187,7 @@ All results can be visualized using **RViz**.
 
 ---
 
-## 📈 Comparison Context
+##  Comparison Context
 
 This repository is part of a **comparative evaluation of multiple SLAM algorithms**
 conducted within the **EAR-Lab** project.
@@ -197,7 +197,7 @@ fair and reproducible comparison.
 
 ---
 
-## 🙏 Acknowledgements
+##  Acknowledgements
 
 This project is based on the **original LVI-SAM implementation**.
 
@@ -205,6 +205,6 @@ All credit for the core algorithm goes to the **original authors**.
 
 ---
 
-## 📄 License
+##  License
 
 This project follows the **license of the original LVI-SAM repository**.
