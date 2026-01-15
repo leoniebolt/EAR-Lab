@@ -98,3 +98,17 @@ ros2 bag play hall_03
 After the rosbag is done playing, the scripts can be stopped using Ctrl + C.
 This saves two files, the tum and pcd file.
 After recieving those files, the evaluation using evo can be done.
+
+---
+
+##  Acknowledgements
+
+This project is based on the **original FAST-LIO-ROS2 implementation**.
+
+All credit for the core algorithm goes to the **original authors**.
+
+---
+
+##  License
+
+This project follows the **license of the original FAST-LIO-ROS2 repository**.
