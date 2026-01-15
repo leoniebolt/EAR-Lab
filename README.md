@@ -37,7 +37,7 @@ rosbags-convert \
 There should be a folder called hall_03, in there should be a hall_03.db3 and a metadata.yaml.
 
 # Start the SLAM
-## Very first setup
+## Build the container
 
 ```bash
 cd docker
@@ -51,7 +51,7 @@ sudo chmod -R 777 container_run.sh
 ./container_run.sh fast-lio-ros2 fast-lio-ros2:latest
  ```
 
-## After initial setup
+## Start container
 
 ```bash
 cd docker
