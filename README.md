@@ -57,6 +57,7 @@ sudo chmod -R 777 container_run.sh
  docker exec -it fast-lio-ros2 /bin/bash
 
  source /opt/ros/humble/setup.bash
+
 ```
 
 
@@ -81,22 +82,30 @@ source install/setup.bash
 ros2 launch fast_lio mapping_m2dgr.launch.py
 ```
 
-In case you want a tum file start this in your second container, since the script should be started before the rosbag gets played.
+In case you want a tum file start this in your second container, since the script should be started before the rosbag gets played
+
 **2nd container**:
 Start the python script to create the tum file:
 ```bash
+source install/setup.bash
+
 python3 save_global_path.py
 ```
 
 In case you want a pcd file start this in your third container, since the script should be started before the rosbag gets played.
+
 **3rd container**:
 ```bash
+source install/setup.bash
+
 python3 save_map_ROS2.py
 ```
 
 **4th container**:
 Start the rosbag:
 ```bash
+source install/setup.bash
+
 ros2 bag play hall_03
 ```
 
