@@ -75,7 +75,7 @@ source /opt/ros/humble/setup.bash
 docker exec -it fast-lio-ros2 /bin/bash
 ```
 
-and then inside the container:
+and then inside the attached container(s):
 
 ```bash
 
