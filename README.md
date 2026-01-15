@@ -49,6 +49,12 @@ xhost +local:docker
 sudo chmod -R 777 container_run.sh
 
 ./container_run.sh fast-lio-ros2 fast-lio-ros2:latest
+``
+
+```bash
+cd src/livox_ros_driver2/
+
+./build.sh humble
  ```
 
 ## Start container
