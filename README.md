@@ -50,7 +50,7 @@ sudo chmod -R 777 container_run.sh
 
 
 
- Open another terminal (in case you want to make a tum file, open two more, so you have 3 in total:
+ Open another terminal (in case you want to make a tum file and a pcd file, open three more, so you have four in total:
  ```bash
  docker exec -it fast-lio-ros2 /bin/bash
 
@@ -82,9 +82,18 @@ Start the python script to create the tum file:
 python3 save_global_path.py
 ```
 
-
+In case you want a pcd file start this in your third container, since the script should be started before the rosbag gets played.
 **3rd container**:
+```bash
+python3 save_map_ROS2.py
+```
+
+**4th container**:
 Start the rosbag:
 ```bash
 ros2 bag play hall_03
 ```
+
+After the rosbag is done playing, the windows with the running scripts can be stopped using Ctrl + C.
+This saves two files, the tum and pcd file.
+After recieving those files, the evaluation using evo can be done.
