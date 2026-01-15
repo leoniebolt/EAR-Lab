@@ -1,13 +1,14 @@
 ## FAST LIO ROS2
 
-In case you later want to evaluate the trajectory of the SLAM and the map, clone this repository to get the python scripts to create a custom tum file from this SLAM.
+In case you later want to evaluate the trajectory of the SLAM and the map, clone this repository and switch to the branch FAST-LIO-ROS2 to get the python scripts to create a custom tum file from this SLAM.
 ```bash
 git clone https://github.com/leoniebolt/EAR-Lab.git
 cd EAR-Lab
+git checkout FAST-LIO-ROS2
 ```
 
 # Installation
-Follow instructions of FAST LIO ROS2 github: https://github.com/Lee-JaeWon/FAST_LIO_ROS2.git:
+Download FAST LIO ROS2 repository:
 ```bash
 git clone --recursive https://github.com/Taeyoung96/FAST_LIO_ROS2.git
 cd FAST_LIO_ROS2
@@ -94,6 +95,6 @@ Start the rosbag:
 ros2 bag play hall_03
 ```
 
-After the rosbag is done playing, the windows with the running scripts can be stopped using Ctrl + C.
+After the rosbag is done playing, the scripts can be stopped using Ctrl + C.
 This saves two files, the tum and pcd file.
 After recieving those files, the evaluation using evo can be done.
