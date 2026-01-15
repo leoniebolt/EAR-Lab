@@ -41,7 +41,7 @@ https://github.com/SJTU-ViSYS/M2DGR.git
 1. Download the dataset from the official repository:
 ```bash
 git clone https://github.com/SJTU-ViSYS/M2DGR.git
-
+```bash
 2. Select a dataset sequence (e.g. `hall_03`) containing the ROS1 rosbag files.
 
 > Note:  
