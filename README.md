@@ -48,7 +48,7 @@ xhost +local:docker
 
 sudo chmod -R 777 container_run.sh
 
- ./container_run.sh fast-lio-ros2 fast-lio-ros2:latest
+./container_run.sh fast-lio-ros2 fast-lio-ros2:latest
  ```
 
 ## After initial setup
@@ -60,7 +60,9 @@ xhost +local:docker
 
 sudo chmod -R 777 container_run.sh
 
- docker exec -it fast-lio-ros2 /bin/bash
+docker exec -it fast-lio-ros2 /bin/bash
+
+source /opt/ros/humble/setup.bash
  ```
 
 
@@ -69,7 +71,6 @@ sudo chmod -R 777 container_run.sh
  docker exec -it fast-lio-ros2 /bin/bash
 
  source /opt/ros/humble/setup.bash
-
 ```
 
 
@@ -77,9 +78,7 @@ sudo chmod -R 777 container_run.sh
 **1st container**:
 Start the SLAM process:
 ```bash
-cd src/livox_ros_driver2/
-
-./build.sh humble
+colcon build
 
 cd ~/ros2_ws
 
