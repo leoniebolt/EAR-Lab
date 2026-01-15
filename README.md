@@ -37,6 +37,7 @@ rosbags-convert \
 There should be a folder called hall_03, in there should be a hall_03.db3 and a metadata.yaml.
 
 # Start the SLAM
+## Very first setup
 
 ```bash
 cd docker
@@ -50,6 +51,17 @@ sudo chmod -R 777 container_run.sh
  ./container_run.sh fast-lio-ros2 fast-lio-ros2:latest
  ```
 
+## After initial setup
+
+```bash
+cd docker
+
+xhost +local:docker
+
+sudo chmod -R 777 container_run.sh
+
+ docker exec -it fast-lio-ros2 /bin/bash
+ ```
 
 
  Open another terminal (in case you want to make a tum file and a pcd file, open three more, so you have four in total:
