@@ -73,6 +73,11 @@ source /opt/ros/humble/setup.bash
  Open another terminal (in case you want to make a tum file and a pcd file, open three more, so you have four in total:
  ```bash
 docker exec -it fast-lio-ros2 /bin/bash
+```
+
+and then inside the container:
+
+```bash
 
 source /opt/ros/humble/setup.bash
 
