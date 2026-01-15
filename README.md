@@ -78,8 +78,6 @@ source /opt/ros/humble/setup.bash
 **1st container**:
 Start the SLAM process:
 ```bash
-cd ~/ros2_ws
-
 colcon build
 
 source install/setup.bash
