@@ -72,9 +72,11 @@ source /opt/ros/humble/setup.bash
 
  Open another terminal (in case you want to make a tum file and a pcd file, open three more, so you have four in total:
  ```bash
- docker exec -it fast-lio-ros2 /bin/bash
+docker exec -it fast-lio-ros2 /bin/bash
 
- source /opt/ros/humble/setup.bash
+source /opt/ros/humble/setup.bash
+
+source install/setup.bash
 ```
 
 
@@ -94,8 +96,6 @@ In case you want a tum file start this in your second container, since the scrip
 **2nd container**:
 Start the python script to create the tum file:
 ```bash
-source install/setup.bash
-
 cd src
 
 python3 save_global_path.py
@@ -107,8 +107,6 @@ In case you want a pcd file start this in your third container, since the script
 ```bash
 cd src
 
-source install/setup.bash
-
 python3 save_map_ROS2.py
 ```
 
@@ -116,8 +114,6 @@ python3 save_map_ROS2.py
 Start the rosbag:
 ```bash
 cd src
-
-source install/setup.bash
 
 ros2 bag play hall_03
 ```
