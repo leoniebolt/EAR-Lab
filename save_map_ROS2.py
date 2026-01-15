@@ -6,7 +6,7 @@ import sensor_msgs_py.point_cloud2 as pc2
 import sys
 
 TOPIC_NAME = "/cloud_registered"
-OUTPUT_FILE = "FASt_LIO_accumulated_map_sparse.pcd"
+OUTPUT_FILE = "FAST_LIO_map.pcd"
 SKIP_FACTOR = 10
 
 class PCDAccumulator(Node):
@@ -92,4 +92,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
