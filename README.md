@@ -1,4 +1,4 @@
-## Comparison of Four SLAM Algorithms
+# Comparison of Four SLAM Algorithms
 
 In this project, four SLAM algorithms are evaluated using the M2DGR dataset.
 
@@ -12,7 +12,7 @@ The main branch of this repository contains three generic Python scripts. These 
 The repository provides four separate branches, one for each SLAM algorithm. Each branch includes detailed instructions on how to run the respective algorithm locally.
 
 
-# To evaluate a specific SLAM approach:
+## To evaluate a specific SLAM approach:
 
 **1.** Switch to the corresponding branch.
 
