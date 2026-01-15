@@ -34,17 +34,6 @@ rosbags-convert \
   --dst hall_03
 ```
 
-In case of this error:
-```bash
-ERROR: Reading source bag: Bag index looks damaged: ('Header could not be read from file.',)
-```
-do this:
-```bash
-rosbag reindex hall_03.bag
-```
-
-
-
 There should be a folder called hall_03, in there should be a hall_03.db3 and a metadata.yaml.
 
 # Start the SLAM
