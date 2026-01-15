@@ -61,7 +61,11 @@ xhost +local:docker
 sudo chmod -R 777 container_run.sh
 
 docker exec -it fast-lio-ros2 /bin/bash
+```
 
+and then inside the container
+
+```bash
 source /opt/ros/humble/setup.bash
  ```
 
