@@ -61,12 +61,6 @@ sudo chmod -R 777 container_run.sh
 ```
 
 
-All the following should stay in
-```bash
-/ros2_ws
-```
-
-
 
 **1st container**:
 Start the SLAM process:
@@ -87,6 +81,8 @@ In case you want a tum file start this in your second container, since the scrip
 **2nd container**:
 Start the python script to create the tum file:
 ```bash
+cd src
+
 source install/setup.bash
 
 python3 save_global_path.py
@@ -96,6 +92,8 @@ In case you want a pcd file start this in your third container, since the script
 
 **3rd container**:
 ```bash
+cd src
+
 source install/setup.bash
 
 python3 save_map_ROS2.py
@@ -104,6 +102,8 @@ python3 save_map_ROS2.py
 **4th container**:
 Start the rosbag:
 ```bash
+cd src
+
 source install/setup.bash
 
 ros2 bag play hall_03
