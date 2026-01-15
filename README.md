@@ -1,6 +1,6 @@
 ## FAST LIO ROS2
 
-In case you later want to evaluate the SLAM, clone this repository to get the python script to create a custom tum file from this SLAM.
+In case you later want to evaluate the trajectory of the SLAM and the map, clone this repository to get the python scripts to create a custom tum file from this SLAM.
 ```bash
 git clone https://github.com/leoniebolt/EAR-Lab.git
 cd EAR-Lab
