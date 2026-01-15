@@ -74,9 +74,9 @@ cd src/livox_ros_driver2/
 
 ./build.sh humble
 
-source install/setup.bash
-
 cd ~/ros2_ws
+
+source install/setup.bash
 
 ros2 launch fast_lio mapping_m2dgr.launch.py
 ```
