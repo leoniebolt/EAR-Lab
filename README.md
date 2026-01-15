@@ -11,8 +11,9 @@ The main branch of this repository contains three generic Python scripts. These 
 
 The repository provides four separate branches, one for each SLAM algorithm. Each branch includes detailed instructions on how to run the respective algorithm locally.
 
+
 # To evaluate a specific SLAM approach:
 
-Switch to the corresponding branch.
+**1.** Switch to the corresponding branch.
 
-Follow the instructions provided in that branch to run the algorithm on your local machine.
+**2.** Follow the instructions provided in that branch to run the algorithm on your local machine.
