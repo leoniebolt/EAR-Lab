@@ -94,9 +94,9 @@ In case you want a tum file start this in your second container, since the scrip
 **2nd container**:
 Start the python script to create the tum file:
 ```bash
-cd src
-
 source install/setup.bash
+
+cd src
 
 python3 save_global_path.py
 ```
